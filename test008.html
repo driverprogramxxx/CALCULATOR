@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sum Inputs</title>
+    <style>
+        body {
+            background-color: #2a2a2a;
+            color: #f1f1f1;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1, h2 {
+            color: #ffffff;
+            text-align: center;
+        }
+        form {
+            background-color: #333333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 600px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 5px;
+            width: 95px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444444;
+            color: #ffffff;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .highlight {
+            border: 2px solid #4CAF50;
+            padding: 10px;
+            background-color: #333333;
+            width: fit-content;
+            border-radius: 5px;
+            margin: auto;
+            text-align: center;
+        }
+        #calculationDetails {
+            color: #b0f2b4;
+            margin-top: 10px;
+        }
+        #totalSum, #distanceUsed {
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <form id="sumForm">
+        <h2>วิ่ง 1 ช่วงให้กรอก 1 ช่อง</h2>
+        <h2>วิ่ง 2 ช่วงให้กรอก 2 ช่อง</h2>
+        
+        <label for="grab">GRAB:</label>
+        <div class="input-group">
+            <input type="number" id="grab1" name="GRAB1" placeholder="GRAB 1" oninput="calculateSum()">
+            <input type="number" id="grab2" name="GRAB2" placeholder="GRAB 2" oninput="calculateSum()">
+        </div>
+
+        <label for="bolt">BOLT:</label>
+        <div class="input-group">
+            <input type="number" id="bolt1" name="BOLT1" placeholder="BOLT 1" oninput="calculateSum()">
+            <input type="number" id="bolt2" name="BOLT2" placeholder="BOLT 2" oninput="calculateSum()">
+        </div>
+
+        <label for="indriver">INDRIVER:</label>
+        <div class="input-group">
+            <input type="number" id="indriver1" name="INDRIVER1" placeholder="INDRIVER 1" oninput="calculateSum()">
+            <input type="number" id="indriver2" name="INDRIVER2" placeholder="INDRIVER 2" oninput="calculateSum()">
+        </div>
+
+        <label for="maxim">MAXIM:</label>
+        <div class="input-group">
+            <input type="number" id="maxim1" name="MAXIM1" placeholder="MAXIM 1" oninput="calculateSum()">
+            <input type="number" id="maxim2" name="MAXIM2" placeholder="MAXIM 2" oninput="calculateSum()">
+        </div>
+
+        <label for="others">งานนอก:</label>
+        <div class="input-group">
+            <input type="number" id="others1" name="OTHERS1" placeholder="OTHERS 1" oninput="calculateSum()">
+            <input type="number" id="others2" name="OTHERS2" placeholder="OTHERS 2" oninput="calculateSum()">
+        </div>
+
+        <label for="electricity">ค่าไฟ:</label>
+        <div class="input-group">
+            <input type="number" id="electricity1" name="ELECTRICITY1" placeholder="Electricity 1" oninput="calculateSum()">
+            <input type="number" id="electricity2" name="ELECTRICITY2" placeholder="Electricity 2" oninput="calculateSum()">
+        </div>
+
+        <label for="startKm">ระยะทางเริ่มต้น (กม.):</label>
+        <div class="input-group">
+            <input type="number" id="startKm1" name="STARTKM1" placeholder="Start KM 1" oninput="calculateDistance()">
+            <input type="number" id="startKm2" name="STARTKM2" placeholder="Start KM 2" oninput="calculateDistance()">
+        </div>
+
+        <label for="endKm">ระยะทางสิ้นสุด (กม.):</label>
+        <div class="input-group">
+            <input type="number" id="endKm1" name="ENDKM1" placeholder="End KM 1" oninput="calculateDistance()">
+            <input type="number" id="endKm2" name="ENDKM2" placeholder="End KM 2" oninput="calculateDistance()">
+        </div>
+    </form>
+
+    <div class="result">
+        <div id="calculationDetails"></div>
+        <div class="highlight">
+            <h2 id="totalSum">รวมยอดที่ต้องโอน 0</h2>
+            <h2 id="distanceUsed">ระยะทางที่ใช้: 0 กม.</h2>
+            <div id="dateTime"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculateSum() {
+            let grab1 = parseFloat(document.getElementById('grab1').value) || 0;
+            let grab2 = parseFloat(document.getElementById('grab2').value) || 0;
+            let grab = grab1 + grab2;
+
+            let bolt1 = parseFloat(document.getElementById('bolt1').value) || 0;
+            let bolt2 = parseFloat(document.getElementById('bolt2').value) || 0;
+            let bolt = bolt1 + bolt2;
+
+            let indriver1 = parseFloat(document.getElementById('indriver1').value) || 0;
+            let indriver2 = parseFloat(document.getElementById('indriver2').value) || 0;
+            let indriver = indriver1 + indriver2;
+
+            let maxim1 = parseFloat(document.getElementById('maxim1').value) || 0;
+            let maxim2 = parseFloat(document.getElementById('maxim2').value) || 0;
+            let maxim = maxim1 + maxim2;
+
+            let others1 = parseFloat(document.getElementById('others1').value) || 0;
+            let others2 = parseFloat(document.getElementById('others2').value) || 0;
+            let others = others1 + others2;
+
+            let electricity1 = parseFloat(document.getElementById('electricity1').value) || 0;
+            let electricity2 = parseFloat(document.getElementById('electricity2').value) || 0;
+            let electricity = electricity1 + electricity2;
+
+            let incomeSum = grab + bolt + indriver + maxim + others;
+            let tenPercent = incomeSum * 0.1;
+            let afterTenPercent = incomeSum - tenPercent;
+            let afterElectricity = afterTenPercent - electricity;
+            let dividedResult = afterElectricity / 2;
+            let finalTotal = dividedResult + tenPercent;
+
+            let details = `
+                GRAB: ${grab1} + ${grab2} = ${grab.toFixed(2)} บาท<br>
+                BOLT: ${bolt1} + ${bolt2} = ${bolt.toFixed(2)} บาท<br>
+                INDRIVER: ${indriver1} + ${indriver2} = ${indriver.toFixed(2)} บาท<br>
+                MAXIM: ${maxim1} + ${maxim2} = ${maxim.toFixed(2)} บาท<br>
+                งานนอก: ${others1} + ${others2} = ${others.toFixed(2)} บาท<br>
+                ยอดรวมรายได้: ${incomeSum.toFixed(2)} บาท<br>
+                ลบค่า maintenance 10% (${tenPercent.toFixed(2)} บาท): ${afterTenPercent.toFixed(2)} บาท<br>
+                ลบค่าไฟ (${electricity.toFixed(2)} บาท): ${afterElectricity.toFixed(2)} บาท<br>
+                หารครึ่ง: ${dividedResult.toFixed(2)} บาท<br>
+                บวก maintenance 10% ที่ลบไป: ${finalTotal.toFixed(2)} บาท
+            `;
+
+            document.getElementById('calculationDetails').innerHTML = details;
+            document.getElementById('totalSum').innerText = "รวมยอดที่ต้องโอน " + finalTotal.toFixed(2);
+        }
+
+        function calculateDistance() {
+            let startKm1 = parseFloat(document.getElementById('startKm1').value) || 0;
+            let startKm2 = parseFloat(document.getElementById('startKm2').value) || 0;
+            let endKm1 = parseFloat(document.getElementById('endKm1').value) || 0;
+            let endKm2 = parseFloat(document.getElementById('endKm2').value) || 0;
+            let startKm = startKm1 + startKm2;
+            let endKm = endKm1 + endKm2;
+            let distanceUsed = endKm - startKm;
+
+            document.getElementById('distanceUsed').innerText = "ระยะทางที่ใช้: " + distanceUsed.toFixed(2) + " กม.";
+        }
+
+        function updateDateTime() {
+            let now = new Date();
+            let options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit', 
+                timeZone: 'Asia/Bangkok'
+            };
+            let dateTimeString = now.toLocaleDateString('th-TH', options);
+            document.getElementById('dateTime').innerText = dateTimeString;
+        }
+
+        setInterval(updateDateTime, 1000); // Update every second
+    </script>
+
+</body>
+</html>
