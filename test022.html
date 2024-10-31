@@ -17,11 +17,11 @@
         }
         form {
             background-color: #333333;
-            padding: 15px; /* ปรับ padding */
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            width: 100%; /* ความกว้างเต็ม */
-            max-width: 600px; /* ความกว้างสูงสุด */
+            width: 100%;
+            max-width: 600px;
             color: #ffffff;
         }
         .section {
@@ -30,11 +30,9 @@
         .income-columns {
             display: flex;
             gap: 20px;
-            flex-wrap: wrap; /* Allow columns to wrap */
         }
         .column {
             flex: 1;
-            min-width: 250px; /* กำหนดความกว้างขั้นต่ำของคอลัมน์ */
         }
         label {
             display: inline-block;
@@ -72,6 +70,7 @@
         }
         #totalSum, #distanceUsed, #ratePerKm {
             color: #FFD700;
+            font-size: 24px; /* Increased font size */
         }
         button {
             margin-top: 10px;
@@ -79,7 +78,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            width: 100%; /* ปรับให้ปุ่มเต็มความกว้าง */
         }
         #calculateButton {
             background-color: #4CAF50; /* Green */
@@ -94,19 +92,6 @@
         }
         #resetButton:hover {
             background-color: #e53935;
-        }
-
-        /* Media Queries สำหรับการตอบสนอง */
-        @media (max-width: 768px) {
-            label {
-                width: auto; /* ปรับให้ label มีความกว้างอัตโนมัติ */
-            }
-            .income-columns {
-                flex-direction: column; /* เปลี่ยนเป็นคอลัมน์ในอุปกรณ์ที่มีขนาดเล็ก */
-            }
-            .column {
-                margin-bottom: 10px; /* เพิ่มระยะห่างระหว่างคอลัมน์ */
-            }
         }
     </style>
 </head>
@@ -151,7 +136,8 @@
         </div>
 
         <div class="section">
-            <h2>เลขไมล์รถ<h2> <h3>(ขับรถ 1 ช่วงให้กรอก 1 ช่อง,ขับรถ 2 ช่วงให้กรอก 2 ช่อง)</h3>
+            <h2>เลขไมล์รถ</h2> 
+            <h3>(ขับรถ 1 ช่วงให้กรอก 1 ช่อง,ขับรถ 2 ช่วงให้กรอก 2 ช่อง)</h3>
             <div class="input-group">
                 <label for="startKm1">ระยะทางเริ่มต้น (กม.):</label>
                 <input type="number" id="startKm1" name="STARTKM1" placeholder="กรอกระยะทาง #1" oninput="resetCalculation()">
@@ -205,45 +191,57 @@
             // Total to be transferred: (Remaining After Expenses / 2) + Maintenance Fee
             let totalToTransfer = (remainingAfterExpenses / 2) + maintenanceFee;
 
-            // Calculate distance
-            let distance1Start = parseFloat(document.getElementById('startKm1').value) || 0;
-            let distance1End = parseFloat(document.getElementById('endKm1').value) || 0;
-            let distance2Start = parseFloat(document.getElementById('startKm2').value) || 0;
-            let distance2End = parseFloat(document.getElementById('endKm2').value) || 0;
+            let calculationText = '';
 
-            let distanceUsed1 = distance1End - distance1Start;
-            let distanceUsed2 = distance2End - distance2Start;
-            let totalDistance = distanceUsed1 + distanceUsed2;
+            // Detailed breakdown
+            if (grab > 0) calculationText += `GRAB: ${grab} บาท\n`;
+            if (bolt > 0) calculationText += `BOLT: ${bolt} บาท\n`;
+            if (indriver > 0) calculationText += `INDRIVER: ${indriver} บาท\n`;
+            if (maxim > 0) calculationText += `MAXIM: ${maxim} บาท\n`;
+            if (others > 0) calculationText += `งานนอก: ${others} บาท\n`;
 
+            calculationText += `ยอดรวมรายได้: ${incomeSum.toFixed(2)} บาท\n`;
+            calculationText += `ลบค่า maintenance 10% (${maintenanceFee.toFixed(2)} บาท) เหลือ ${remainingIncome.toFixed(2)} บาท\n`;
+            calculationText += `ลบค่าไฟ (${electricity.toFixed(2)} บาท) เหลือ ${remainingAfterExpenses.toFixed(2)} บาท\n`;
+            calculationText += `ยอดที่ต้องโอน: ${totalToTransfer.toFixed(2)} บาท (${remainingAfterExpenses.toFixed(2)}/2 + ${maintenanceFee.toFixed(2)})\n`;
+
+            // Calculate distance used
+            let distanceUsed = calculateDistance();
             // Calculate rate per km
-            let ratePerKm = totalDistance > 0 ? totalToTransfer / totalDistance : 0;
+            let ratePerKm = distanceUsed > 0 ? (incomeSum / distanceUsed) : 0;
 
-            // Update the display
-            document.getElementById('totalSum').textContent = `รวมยอดที่ต้องโอน: ${totalToTransfer.toFixed(2)} บาท`;
-            document.getElementById('distanceUsed').textContent = `ระยะทางที่ใช้: ${totalDistance.toFixed(2)} กม.`;
-            document.getElementById('ratePerKm').textContent = `บาทต่อกิโลเมตร: ${ratePerKm.toFixed(2)} บาท/กม.`;
+            // Update calculation details
+            document.getElementById('calculationDetails').innerText = calculationText;
+            document.getElementById('distanceUsed').innerText = `ระยะทางที่ใช้: ${distanceUsed.toFixed(2)} กม.`;
+            document.getElementById('ratePerKm').innerText = `บาทต่อกิโลเมตร: ${(incomeSum / distanceUsed).toFixed(2)} บาท/กม.`;
+            document.getElementById('totalSum').innerText = `รวมยอดที่ต้องโอน: ${totalToTransfer.toFixed(2)} บาท`;
 
-            // Display current date and time
-            document.getElementById('dateTime').textContent = `เวลาที่คำนวณ: ${new Date().toLocaleString()}`;
+            // Update date and time
+            document.getElementById('dateTime').innerText = new Date().toLocaleString('th-TH'); // Current date and time in Thai format
+        }
+
+        function calculateDistance() {
+            let startKm1 = parseFloat(document.getElementById('startKm1').value) || 0;
+            let endKm1 = parseFloat(document.getElementById('endKm1').value) || 0;
+            let startKm2 = parseFloat(document.getElementById('startKm2').value) || 0;
+            let endKm2 = parseFloat(document.getElementById('endKm2').value) || 0;
+
+            let distance1 = endKm1 - startKm1;
+            let distance2 = endKm2 - startKm2;
+
+            let totalDistance = distance1 + distance2;
+            return totalDistance > 0 ? totalDistance : 0; // Return 0 if total distance is negative
         }
 
         function resetCalculation() {
             document.getElementById('calculationBox').style.display = 'none'; // Hide calculation results
-            if (isCalculated) {
-                // Clear previous calculations only if they were calculated
-                document.getElementById('totalSum').textContent = `รวมยอดที่ต้องโอน: 0 บาท`;
-                document.getElementById('distanceUsed').textContent = `ระยะทางที่ใช้: 0 กม.`;
-                document.getElementById('ratePerKm').textContent = `บาทต่อกิโลเมตร: 0.00 บาท/กม.`;
-                document.getElementById('calculationDetails').textContent = '';
-                isCalculated = false; // Reset calculation status
-            }
+            isCalculated = false; // Reset calculation status
         }
 
         function confirmReset() {
-            if (confirm('คุณแน่ใจหรือไม่ว่าจะรีเซ็ตข้อมูลทั้งหมด?')) {
-                document.getElementById('sumForm').reset(); // Reset form fields
-                resetCalculation(); // Reset calculation details
-                document.getElementById('calculationBox').style.display = 'none'; // Hide calculation results
+            if (confirm("คุณแน่ใจว่าต้องการรีเซ็ตข้อมูลทั้งหมด?")) {
+                document.getElementById('sumForm').reset();
+                resetCalculation();
             }
         }
     </script>
