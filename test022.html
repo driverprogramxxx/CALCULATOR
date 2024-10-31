@@ -29,10 +29,12 @@
         }
         .income-columns {
             display: flex;
+            flex-wrap: wrap; /* Allow wrapping of columns */
             gap: 20px;
         }
         .column {
             flex: 1;
+            min-width: 150px; /* Set a minimum width for columns */
         }
         label {
             display: inline-block;
