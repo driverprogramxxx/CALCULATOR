@@ -227,6 +227,11 @@
             let distance2 = Math.abs(endKm2 - startKm2);
             let totalDistance = distance1 + distance2;
 
+            calculationText += `start #1: ${startKm1} KM\n`;
+            calculationText += `end #1: ${endKm1} KM\n`;
+            calculationText += `start #2: ${startKm2} KM\n`;
+            calculationText += `end #2: ${endKm2} KM\n`;
+
             // Update distance used and rate per km
             document.getElementById('distanceUsed').innerText = `ระยะทางที่ใช้: ${totalDistance} กม.`;
             let ratePerKm = (incomeSum / totalDistance).toFixed(2) || 0; // Avoid division by zero
