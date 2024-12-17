@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sum Inputs</title>
+    <style>
+        body {
+            background-color: #2a2a2a;
+            color: #f1f1f1;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        form {
+            background-color: #333333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            color: #ffffff;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-align: left; /* Align label text to the left */
+        }
+        .input-group {
+            display: flex;
+            justify-content: space-between; /* Space between label and input */
+            align-items: center; /* Center align the input fields */
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444444;
+            color: #ffffff;
+        }
+        .highlight {
+            border: 2px solid #4CAF50;
+            padding: 10px;
+            background-color: #333333;
+            width: fit-content;
+            border-radius: 5px;
+            margin: 20px auto 0;
+            text-align: left;
+            display: none; /* Initially hidden */
+        }
+        #calculationDetails {
+            color: #b0f2b4;
+            margin-top: 10px;
+            white-space: pre-line;
+            font-size: 12px; /* Small font size */
+        }
+        #totalSum, #distanceUsed, #ratePerKm {
+            color: #FFD700;
+            font-size: 24px; /* Increased font size */
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 48%;
+        }
+        #calculateButton {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #resetButton {
+            background-color: #f44336;
+            color: white;
+        }
+        #calculateButton:hover {
+            background-color: #45a049;
+        }
+        #resetButton:hover {
+            background-color: #e53935;
+        }
+        .compact-input-group {
+            display: flex;
+            justify-content: space-between; /* Space between label and input */
+            align-items: center; /* Center align the input fields */
+            margin-bottom: 10px;
+        }
+        .compact-input-group label {
+            margin: 0; /* Remove margin for labels in compact group */
+            width: 30%; /* Width for labels */
+            text-align: right; /* Right align labels */
+        }
+        .compact-input-group input {
+            width: 50%; /* Set width for inputs in compact group */
+        }
+    </style>
+</head>
+<body>
+    <form id="sumForm">
+        <div class="section">
+            <h2>รายรับ</h2>
+            <div class="input-group">
+                <label for="grab">GRAB:</label>
+                <input type="number" id="grab" name="GRAB" placeholder="กรอกจำนวนเงิน" oninput="resetCalculation()">
+            </div>
+            <div class="input-group">
+                <label for="bolt">BOLT:</label>
+                <input type="number" id="bolt" name="BOLT" placeholder="กรอกจำนวนเงิน" oninput="resetCalculation()">
+            </div>
+            <div class="input-group">
+                <label for="indriver">INDRIVER:</label>
+                <input type="number" id="indriver" name="INDRIVER" placeholder="กรอกจำนวนเงิน" oninput="resetCalculation()">
+            </div>
+            <div class="input-group">
+                <label for="maxim">MAXIM:</label>
+                <input type="number" id="maxim" name="MAXIM" placeholder="กรอกจำนวนเงิน" oninput="resetCalculation()">
+            </div>
+            <div class="input-group">
+                <label for="lineman">LINEMAN:</label>
+                <input type="number" id="lineman" name="LINEMAN" placeholder="กรอกจำนวนเงิน" oninput="resetCalculation()">
+            </div>
+            <div class="input-group">
+                <label for="others">งานนอก:</label>
+                <input type="number" id="others" name="OTHERS" placeholder="กรอกจำนวนเงิน" oninput="resetCalculation()">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>รายจ่าย</h2>
+            <div class="input-group">
+                <label for="electricity">ค่าไฟ:</label>
+                <input type="number" id="electricity" name="ELECTRICITY" placeholder="กรอกจำนวนเงิน" oninput="resetCalculation()">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>เลขไมล์รถ</h2> 
+            <h4>ขับกะเช้า (ขับรถไม่ข้ามวัน)</h4> 
+            <div class="compact-input-group">
+                <label for="startday1">เริ่มงาน</label>
+                <input type="number" id="startday1" name="startday1" placeholder="กรอกระยะทาง #1" oninput="resetCalculation()">
+            </div>
+            <div class="compact-input-group">
+                <label for="endday1">จบงาน</label>
+                <input type="number" id="endday1" name="endday1" placeholder="กรอกระยะทาง #1" oninput="resetCalculation()">
+            </div>
+            <h4>ขับกะกลางคืน (ขับข้ามวัน)</h4>
+            <h5>ใส่ยอดตั้งแต่เที่ยงคืนเมื่อวาน-เที่ยงคืนวันนี้</h5>
+            <h5>ยอดหลังเที่ยงคืนคิดในวันถัดไป</h5>
+            <h5>เช่น 0.00-8.00น. ช่วง1 และ 20.00-24.00น. ช่วง2</h5>
+            <div class="compact-input-group">
+                <label for="startnight1">เมื่อวาน 0.00น.</label>
+                <input type="number" id="startnight1" name="startnight1" placeholder="กรอกระยะทาง #1" oninput="resetCalculation()">
+            </div>
+            <div class="compact-input-group">
+                <label for="endnight1">จบงานเมื่อวานตอนเช้า</label>
+                <input type="number" id="endnight1" name="endnight1" placeholder="กรอกระยะทาง #1" oninput="resetCalculation()">
+            </div>
+            <div class="compact-input-group">
+                <label for="startnight2">เริ่มงานเมื่อวานตอนเย็น</label>
+                <input type="number" id="startnight2" name="startnight2" placeholder="กรอกระยะทาง #2" oninput="resetCalculation()">
+            </div>
+            <div class="compact-input-group">
+                <label for="endnight2">เมื่อวาน 24.00น./ วันนี้ 0.00น.</label>
+                <input type="number" id="endnight2" name="endnight2" placeholder="กรอกระยะทาง #2" oninput="resetCalculation()">
+            </div>
+        </div>
+
+        <div class="highlight" id="calculationBox">
+            <div id="calculationDetails"></div>
+            <h2 id="totalSum">รวมยอดที่ต้องโอน: 0 บาท</h2>
+            <h2 id="distanceUsed">ระยะทางที่ใช้: 0 กม.</h2>
+            <h2 id="ratePerKm">บาทต่อกิโลเมตร: 0.00 บาท/กม.</h2>
+            <div id="dateTime"></div>
+        </div>
+
+        <div class="button-container">
+            <button type="button" id="resetButton" onclick="confirmReset()">รีเซ็ต</button>
+            <button type="button" id="calculateButton" onclick="calculateAndShow()">คำนวณ</button>
+        </div>
+    </form>
+
+    <script>
+        let isCalculated = false;
+
+        function calculateAndShow() {
+            calculateSum();
+            document.getElementById('calculationBox').style.display = 'block'; // Show calculation results
+            isCalculated = true; // Mark as calculated
+        }
+
+        function calculateSum() {
+            let grab = parseFloat(document.getElementById('grab').value) || 0;
+            let bolt = parseFloat(document.getElementById('bolt').value) || 0;
+            let indriver = parseFloat(document.getElementById('indriver').value) || 0;
+            let maxim = parseFloat(document.getElementById('maxim').value) || 0;
+            let lineman = parseFloat(document.getElementById('lineman').value) || 0;
+            let others = parseFloat(document.getElementById('others').value) || 0;
+            let electricity = parseFloat(document.getElementById('electricity').value) || 0;
+
+            let incomeSum = grab + bolt + indriver + maxim + others + lineman;
+            let maintenanceFee = incomeSum * 0.1; // 10% maintenance
+            let remainingIncome = incomeSum - maintenanceFee; // Remaining after maintenance
+
+            let remainingAfterExpenses = remainingIncome - electricity; // Remaining after expenses
+            let half = remainingAfterExpenses / 2; // Half of remaining after expenses
+            let totalToTransfer = half + maintenanceFee;
+
+            let calculationText = '';
+
+            // Detailed breakdown
+            if (grab > 0) calculationText += `GRAB: ${grab} บาท\n`;
+            if (bolt > 0) calculationText += `BOLT: ${bolt} บาท\n`;
+            if (indriver > 0) calculationText += `INDRIVER: ${indriver} บาท\n`;
+            if (maxim > 0) calculationText += `MAXIM: ${maxim} บาท\n`;
+            if (lineman > 0) calculationText += `LINEMAN: ${lineman} บาท\n`;
+            if (others > 0) calculationText += `งานนอก: ${others} บาท\n`;
+            calculationText += `รวมยอดรายรับ = ${incomeSum.toFixed(2)} บาท\n`;
+            calculationText += `maintenance (10%) = ${maintenanceFee.toFixed(2)} บาท\n`;
+            calculationText += `ค่าไฟ: ${electricity} บาท\n`;
+            calculationText += `รวมรายจ่าย = ${maintenanceFee.toFixed(2)} + ${electricity} = ${(maintenanceFee + electricity).toFixed(2)} บาท\n`;
+            calculationText += `หารครึ่ง = (${incomeSum.toFixed(2)} - ${(maintenanceFee + electricity).toFixed(2)}) / 2 = ${half.toFixed(2)} บาท\n`;
+            calculationText += `หารครึ่ง+บำรุง 10% = ${half.toFixed(2)} + ${maintenanceFee.toFixed(2)} = ${totalToTransfer.toFixed(2)} บาท\n`;
+
+            // Calculate distance
+            let startday1 = parseFloat(document.getElementById('startday1').value) || 0;
+            let endday1 = parseFloat(document.getElementById('endday1').value) || 0;
+            let startnight1 = parseFloat(document.getElementById('startnight1').value) || 0;
+            let endnight1 = parseFloat(document.getElementById('endnight1').value) || 0;
+            let startnight2 = parseFloat(document.getElementById('startnight2').value) || 0;
+            let endnight2 = parseFloat(document.getElementById('endnight2').value) || 0;
+
+            let distance1 = Math.abs(endday1 - startday1);
+            let distance2 = Math.abs(endnight1 - startnight1);
+            let distance3 = Math.abs(endnight2 - startnight2);
+            let totalDistance = distance1 + distance2 + distance3;
+            
+            if (startday1 > 0) calculationText += `เริ่มกะเช้า : ${startday1} KM\n`;
+            if (endday1 > 0) calculationText += `จบกะเช้า : ${endday1} KM\n`;
+            if (startnight1 > 0) calculationText += `0.00 กะกลางคืน : ${startnight1} KM\n`;
+            if (endnight1 > 0) calculationText += `จบงานกะกลางคืน : ${endnight1} KM\n`;
+            if (startnight2 > 0) calculationText += `เริ่มงานกะกลางคืน : ${startnight2} KM\n`;
+            if (endnight2 > 0) calculationText += `24.00 กะกลางคืน : ${endnight2} KM\n`;
+            
+            //bonus
+            let percentBonus = 0;
+            let bonus = 0;
+
+            if (totalDistance > 0) {
+                // คำนวณเปอร์เซ็นต์โบนัส
+                percentBonus = (incomeSum / totalDistance) - 10;
+
+                // ถ้าเปอร์เซ็นต์โบนัสน้อยกว่า 20 ให้คำนวณโบนัสจาก 50% ของหารครึ่ง
+                if (percentBonus < 20) {
+                    bonus = (percentBonus / 100) * half;
+                    calculationText += `โบนัส: ${bonus.toFixed(2)} บาท\n`;
+                } else {
+                    bonus = (20 / 100) * half;
+                    calculationText += `โบนัส: ${bonus.toFixed(2)} บาท\n`;
+                }
+            } else {
+                calculationText += `โบนัส: คำนวณไม่ได้เนื่องจากระยะทางรวมเป็นศูนย์\n`;
+            }
+
+            
+
+
+            // Update distance used and rate per km
+            document.getElementById('distanceUsed').innerText = `ระยะทางที่ใช้: ${totalDistance} กม.`;
+            let ratePerKm = (incomeSum / totalDistance).toFixed(2) || 0; // Avoid division by zero
+            document.getElementById('ratePerKm').innerText = `บาทต่อกิโลเมตร: ${ratePerKm} บาท/กม.`;
+
+            // Update calculation details
+            document.getElementById('calculationDetails').innerText = calculationText;
+            document.getElementById('totalSum').innerText = `รวมยอดที่ต้องโอน: ${totalToTransfer.toFixed(2)} บาท`;
+        }
+
+        function resetCalculation() {
+            document.getElementById('calculationBox').style.display = 'none'; // Hide calculation results
+            isCalculated = false; // Reset calculation flag
+        }
+
+        function confirmReset() {
+            if (confirm("คุณแน่ใจว่าจะรีเซ็ตข้อมูลทั้งหมด?")) {
+                document.getElementById('sumForm').reset(); // Reset form
+                resetCalculation(); // Reset calculations
+                document.getElementById('calculationBox').style.display = 'none'; // Hide calculation results
+            }
+        }
+
+        // Real-time clock function
+        setInterval(function() {
+            const now = new Date();
+            const dateTimeStr = `${now.toLocaleDateString('th-TH')} ${now.toLocaleTimeString('th-TH')}`;
+            document.getElementById('dateTime').innerText = dateTimeStr;
+        }, 1000);
+    </script>
+</body>
+</html>
