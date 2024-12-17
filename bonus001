@@ -262,7 +262,7 @@
 
             if (totalDistance > 0) {
                 // คำนวณเปอร์เซ็นต์โบนัส
-                percentBonus = (incomeSum / totalDistance) - 10;
+                percentBonus = ((incomeSum / totalDistance) - 10)*2;
 
                 // ถ้าเปอร์เซ็นต์โบนัสน้อยกว่า 20 ให้คำนวณโบนัสจาก 50% ของหารครึ่ง
                 if (percentBonus < 20) {
