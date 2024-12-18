@@ -262,21 +262,38 @@
 
             if (totalDistance > 0) {
                 // คำนวณเปอร์เซ็นต์โบนัส
-                percentBonus = ((incomeSum / totalDistance) - 10)*2;
+                percentBonus = (incomeSum / totalDistance) - 10;
 
                 // ถ้าเปอร์เซ็นต์โบนัสน้อยกว่า 20 ให้คำนวณโบนัสจาก 50% ของหารครึ่ง
                 if (percentBonus < 20) {
                     bonus = (percentBonus / 100) * half;
-                    calculationText += `โบนัส: ${bonus.toFixed(2)} บาท\n`;
+                    calculationText += `โบนัสรถใหญ่: ${bonus.toFixed(2)} บาท\n`;
                 } else {
                     bonus = (20 / 100) * half;
-                    calculationText += `โบนัส: ${bonus.toFixed(2)} บาท\n`;
+                    calculationText += `โบนัสรถใหญ่: ${bonus.toFixed(2)} บาท\n`;
                 }
             } else {
-                calculationText += `โบนัส: คำนวณไม่ได้เนื่องจากระยะทางรวมเป็นศูนย์\n`;
+                calculationText += `โบนัสรถใหญ่: คำนวณไม่ได้เนื่องจากระยะทางรวมเป็นศูนย์\n`;
             }
 
-            
+            let percentBonusSM = 0;
+            let bonusSM = 0;
+
+            if (totalDistance > 0) {
+                // คำนวณเปอร์เซ็นต์โบนัส
+                percentBonusSM = ((incomeSum / totalDistance) - 10)*3 ;
+
+                // ถ้าเปอร์เซ็นต์โบนัสน้อยกว่า 20 ให้คำนวณโบนัสจาก 50% ของหารครึ่ง
+                if (percentBonusSM < 30) {
+                    bonusSM = (percentBonusSM / 100) * half;
+                    calculationText += `โบนัสรถเล็ก: ${bonusSM.toFixed(2)} บาท\n`;
+                } else {
+                    bonusSM = (30 / 100) * half;
+                    calculationText += `โบนัสรถเล็ก: ${bonusSM.toFixed(2)} บาท\n`;
+                }
+            } else {
+                calculationText += `โบนัสรถเล็ก: คำนวณไม่ได้เนื่องจากระยะทางรวมเป็นศูนย์\n`;
+            }
 
 
             // Update distance used and rate per km
