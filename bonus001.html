@@ -281,14 +281,14 @@
 
             if (totalDistance > 0) {
                 // คำนวณเปอร์เซ็นต์โบนัส
-                percentBonusSM = ((incomeSum / totalDistance) - 10)*3 ;
+                percentBonusSM = (incomeSum / totalDistance) - 10 ;
 
                 // ถ้าเปอร์เซ็นต์โบนัสน้อยกว่า 20 ให้คำนวณโบนัสจาก 50% ของหารครึ่ง
-                if (percentBonusSM < 30) {
-                    bonusSM = (percentBonusSM / 100) * half;
+                if (percentBonusSM < 20 ) {
+                    bonusSM = (percentBonusSM / 100)* 1.5 * half;
                     calculationText += `โบนัสรถเล็ก: ${bonusSM.toFixed(2)} บาท\n`;
                 } else {
-                    bonusSM = (30 / 100) * half;
+                    bonusSM = (20 / 100)* 1.5 * half;
                     calculationText += `โบนัสรถเล็ก: ${bonusSM.toFixed(2)} บาท\n`;
                 }
             } else {
